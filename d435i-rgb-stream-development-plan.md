@@ -29,6 +29,80 @@ Vision Pro 原生 visionOS App
 
 第一版以稳定完成 `1280×720@30fps` 实时播放为目标。
 
+### 2.1 当前实现的运行命令
+
+以下命令适用于项目中的 `d435i-webrtc-streamer`。D435i 连接到 Ubuntu 主机的 USB 3.x 端口后，先完成一次构建和 MediaMTX 下载：
+
+```bash
+cd d435i-webrtc-streamer
+./scripts/build.sh
+./scripts/download-mediamtx.sh
+```
+
+查看 Ubuntu 主机的局域网 IP：
+
+```bash
+hostname -I
+```
+
+假设局域网 IP 为 `10.252.68.17`，在第一个终端启动 MediaMTX：
+
+```bash
+cd d435i-webrtc-streamer
+./scripts/run-mediamtx.sh 10.252.68.17
+```
+
+保持第一个终端运行，在第二个终端启动 D435i RGB 推流：
+
+```bash
+cd d435i-webrtc-streamer
+./build/d435i-streamer \
+  --serial 406122071612 \
+  --width 1280 \
+  --height 720 \
+  --fps 30 \
+  --bitrate-kbps 5000 \
+  --encoder x264enc \
+  --rtsp-url rtsp://127.0.0.1:8554/d435i
+```
+
+同一局域网中的电脑或 Vision Pro 浏览器打开：
+
+```text
+http://10.252.68.17:8889/d435i/
+```
+
+将示例中的 `10.252.68.17` 替换为实际的 Ubuntu 主机 IP。`8889` 是 WebRTC 预览端口，不要误用 `8888` 的 HLS 端口。Vision Pro 原生客户端后续使用以下 WHEP 地址：
+
+```text
+http://10.252.68.17:8889/d435i/whep
+```
+
+首次运行需要允许 TCP `8554`、TCP `8889` 和 UDP `8189` 的局域网访问。
+
+### 2.2 D435i 实机验证结果
+
+验证日期：2026-09-23。
+
+当前已在 D435i 实机上完成 RGB 视频链路验证：
+
+- 摄像头能够以 RGB8、`1280×720@30fps` 采集视频。
+- 使用 `x264enc` 完成低延迟 H.264 编码。
+- MediaMTX 能够接收 RTSP 推流并转换为 WebRTC。
+- 同一局域网中的浏览器能够实时显示 D435i 画面。
+
+已经验证的链路如下：
+
+```text
+D435i RGB → librealsense → RGB8/NV12 → H.264 → RTSP → MediaMTX → WebRTC → 浏览器
+```
+
+尚未完成的工作：
+
+- 进行 30～60 分钟稳定性测试并记录端到端延迟。
+- 在 Vision Pro Safari 和原生 visionOS App 上进行真机验证。
+- 适配 RTX 5070 硬件编码。当前 GStreamer 1.20.3 的旧版 NVENC preset 与新显卡驱动不兼容，暂时使用 `x264enc`。
+
 ## 3. 功能范围
 
 ### 3.1 包含内容
