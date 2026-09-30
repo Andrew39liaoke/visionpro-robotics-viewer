@@ -136,41 +136,68 @@ Ubuntu 至少需要允许：
 - Ubuntu 防火墙没有拦截 UDP 8189。
 - 企业 Wi-Fi 没有禁止客户端之间通信。
 
-## 6. 开启 Vision Pro 开发者模式
+## 6. 发起 Vision Pro 与 Xcode 配对
 
-在 Vision Pro 中打开：
+> 第一次配对时，应先从 Xcode 发起配对。只有开始配对或设备以前与 Mac 配对过以后，Vision Pro 的“开发者模式”选项才会出现在“隐私与安全性”中。
+
+1. 确保 Mac 和 Vision Pro 位于同一个局域网，并确认该网络支持 IPv6。
+2. 保持 Vision Pro 解锁和佩戴状态。
+3. 在 Vision Pro 中打开并停留在：
 
 ```text
-设置 → 隐私与安全性 → 开发者模式
+设置 → 通用 → 远程设备
 ```
 
-开启开发者模式后，按照系统提示重启 Vision Pro。
-
-重启后确认开发者模式仍处于开启状态，并保持 Vision Pro 解锁。
-
-## 7. 将 Vision Pro 与 Xcode 配对
-
-1. 确保 Mac 和 Vision Pro 位于同一局域网。
-2. 在 Mac 上打开 Xcode。
-3. 选择：
+4. 在 Mac 上打开 Xcode，从屏幕顶部的菜单栏选择：
 
 ```text
 Window → Devices and Simulators
 ```
 
-4. 在设备列表中选择 Vision Pro。
-5. 按照 Mac 和 Vision Pro 上显示的提示完成配对。
-6. 等待 Xcode 完成设备支持文件准备。
+也可以使用快捷键：
+
+```text
+Shift + Command + 2
+```
+
+部分新版 Xcode 将设备管理界面称为 `Device Hub`，也可以从运行目标菜单底部的 `Manage Devices…` 打开。若 `Xcode → Open Developer Tool` 中没有 `Device Hub`，属于正常情况，直接使用 `Window → Devices and Simulators` 即可。
+
+5. 在窗口顶部选择 `Devices`，等待左侧设备列表出现 Vision Pro。
+6. 选择搜索到的 Vision Pro，点击 `Pair`，然后按照两台设备上的提示输入配对码。部分新版界面需要先点击 `+`，再选择 `Pair Nearby Device…`。
+7. 如果 Xcode 提示需要开启开发者模式，继续执行下一节。
+
+## 7. 开启 Vision Pro 开发者模式并完成配对
+
+Xcode 发起配对后，在 Vision Pro 中打开：
+
+```text
+设置 → 隐私与安全性
+```
+
+滚动到页面底部的“安全性”区域，打开：
+
+```text
+开发者模式
+```
+
+然后完成以下操作：
+
+1. 在警告窗口中确认开启并重启 Vision Pro。
+2. 重启后解锁并佩戴 Vision Pro。
+3. 根据系统提示再次确认启用开发者模式。
+4. 回到 Mac 的 `Devices and Simulators` 或 `Device Hub`，继续完成配对，并等待 Xcode 准备设备支持文件。
 
 设备状态正常时，Xcode 顶部的运行目标列表中会显示这台 Vision Pro。
 
-如果设备未出现，可依次检查：
+如果“开发者模式”仍未出现或 Xcode 搜索不到设备，可依次检查：
 
-- Mac 和 Vision Pro 是否使用兼容的系统与 Xcode 版本。
-- 两台设备是否在同一局域网。
-- Vision Pro 是否已经开启开发者模式。
+- Vision Pro 是否一直停留在“设置 → 通用 → 远程设备”页面。
+- Mac 和 Vision Pro 是否位于同一个支持 Bonjour 和 IPv6 的局域网。
+- 路由器是否启用了 AP Isolation、Client Isolation 或访客网络隔离。
+- Mac 和 Vision Pro 是否使用兼容的 Xcode、macOS 和 visionOS 版本。
 - Vision Pro 是否处于解锁和佩戴状态。
-- 关闭后重新打开 Xcode 的 Devices and Simulators 窗口。
+- 在 Vision Pro 的“远程设备”中移除旧的 Mac 配对记录，然后重新配对。
+- 关闭并重新打开 `Devices and Simulators`；仍然无效时，重启 Xcode、Mac 和 Vision Pro 后重试。
 
 ## 8. 配置 Xcode 签名
 
@@ -438,4 +465,3 @@ App 的 Basic/Bearer 凭据单独保存在 Vision Pro Keychain 中，不允许�
 - [Vision Pro WebRTC 客户端开发方案](visionos-webrtc-viewer-development-plan.md)
 - [D435i WebRTC 推流端说明](d435i-webrtc-streamer/README.md)
 - [D435i RGB 视频开发方案](d435i-rgb-stream-development-plan.md)
-
